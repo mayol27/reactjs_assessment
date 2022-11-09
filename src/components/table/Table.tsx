@@ -10,44 +10,33 @@ import cn from "classnames";
 function Table() {
   const [useData, setUseData] = React.useState(data);
 
-  // const joinData = [...useData.announcements, ...useData.errors];
+  const list = [
+    ...useData.announcements.map((e) => ({ ...e, type: "announcements" })),
+    ...useData.errors.map((e) => ({ ...e, type: "errors" })),
+  ];
 
-  const dataDSC = useData.errors.sort(
+  const dataDSC = list.sort(
     (curr, next) =>
-      -new Date(next.createdOn).getTime() - new Date(curr.createdOn).getTime()
+      new Date(next.createdOn).getTime() - new Date(curr.createdOn).getTime()
   );
 
   return (
     <div className="py-5">
-      {useData.announcements.map((item, key) => (
-        <div
-          key={key}
-          className="border border-b-2 border-l-[#6AE6C6] border-gray-300 border-l-8  rounded w-full grid grid-cols-12 mb-4 last:mb-0"
-        >
-          <div className="icon col-span-2 flex p-2">
-            <img src={icon_announce} alt="" className="mr-3" />
-            <p>Announcement</p>
-          </div>
-          <div className="day col-span-2 p-2 flex">
-            <p className="mr-2">{moment(item.createdOn).format("MMM Do YY")}</p>
-            <span>ago</span>
-          </div>
-          <div className="content col-span-7 p-2">{item.title}</div>
-          <div className="button border-l-2 flex items-center justify-center col-span-1">
-            <button>
-              <img src={icon_remove} alt="" />
-            </button>
-          </div>
-        </div>
-      ))}
       {dataDSC.map((item, key) => (
         <div
           key={key}
-          className="border border-b-2 border-l-[#e61d2b] border-gray-300 border-l-8  rounded w-full grid grid-cols-12 mb-4 last:mb-0"
+          className={cn(
+            "border border-b-2  border-gray-300 border-l-8  rounded w-full grid grid-cols-12 mb-4 last:mb-0",
+            item.type === "errors" ? "border-l-[#e61d2b]" : "border-l-[#6AE6C6]"
+          )}
         >
           <div className="icon col-span-2 flex p-2">
-            <img src={icon_alert} alt="" className="mr-3" />
-            <p>Event Error</p>
+            <img
+              src={item.type === "errors" ? icon_alert : icon_announce}
+              alt=""
+              className="mr-3"
+            />
+            <p>{item.type === "errors" ? "Event Error" : "Announcement"}</p>
           </div>
           <div className="day col-span-2 p-2 flex">
             <p className="mr-2">{moment(item.createdOn).format("MMM Do YY")}</p>
@@ -55,7 +44,7 @@ function Table() {
           </div>
           <div className="content col-span-7 p-2">{item.title}</div>
           <div className="button border-l-2 flex items-center justify-center col-span-1">
-            <button>
+            <button className="hover:bg-red-700 rounded-full">
               <img src={icon_remove} alt="" />
             </button>
           </div>
