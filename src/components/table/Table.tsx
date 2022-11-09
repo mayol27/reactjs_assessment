@@ -55,9 +55,9 @@ function Table() {
           </div>
           <div className="content col-span-7 p-2">{item.title}</div>
           <div className="button border-l-2 flex items-center justify-center col-span-1">
-            {/* <button onClick={() => removeAlert(product.id)}>
+            <button>
               <img src={icon_remove} alt="" />
-            </button> */}
+            </button>
           </div>
         </div>
       ))}
